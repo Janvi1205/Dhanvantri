@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug VCF Upload</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .upload-area { border: 2px dashed #ccc; padding: 20px; text-align: center; margin: 20px 0; }
+        .result { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+        .error { background-color: #ffe6e6; border-color: #ff0000; }
+        .success { background-color: #e6ffe6; border-color: #00ff00; }
+    </style>
+</head>
+<body>
+    <h1>Debug VCF Upload</h1>
+    
+    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+        Click here to select a VCF file
+        <input type="file" id="fileInput" accept=".vcf" style="display: none;">
+    </div>
+    
+    <div id="result" class="result" style="display: none;"></div>
+    
+    <script>
+        const AppState = {
+            apiEndpoint: 'http://localhost:8000'
+        };
+        
+        document.getElementById('fileInput').addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            console.log('File selected:', file.name, file.size, file.type);
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result';
+            resultDiv.innerHTML = 'Uploading...';
+            
+            try {
+                const result = await uploadVcfFile(file);
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = `
+                    <h3>Upload Successful!</h3>
+                    <p><strong>Filename:</strong> ${result.filename}</p>
+                    <p><strong>Filepath:</strong> ${result.filepath}</p>
+                    <p><strong>Size:</strong> ${result.size} bytes</p>
+                `;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <h3>Upload Failed!</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+            }
+        });
+        
+        async function uploadVcfFile(file) {
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                console.log('Making request to:', `${AppState.apiEndpoint}/api/upload-vcf`);
+                
+                const response = await fetch(`${AppState.apiEndpoint}/api/upload-vcf`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                // Get response text first to debug
+                const responseText = await response.text();
+                console.log('Upload response status:', response.status);
+                console.log('Upload response headers:', [...response.headers.entries()]);
+                console.log('Upload response text:', responseText);
+                
+                if (!response.ok) {
+                    let errorMessage = 'Upload failed';
+                    try {
+                        const errorData = JSON.parse(responseText);
+                        errorMessage = errorData.error || errorMessage;
+                    } catch (parseError) {
+                        console.error('Failed to parse error response:', parseError);
+                        errorMessage = `Server error: ${response.status} ${response.statusText}`;
+                    }
+                    throw new Error(errorMessage);
+                }
+                
+                // Parse successful response
+                try {
+                    return JSON.parse(responseText);
+                } catch (parseError) {
+                    console.error('Failed to parse success response:', parseError);
+                    console.error('Response text was:', responseText);
+                    throw new Error('Invalid response from server');
+                }
+            } catch (error) {
+                console.error('VCF upload failed:', error);
+                throw error;
+            }
+        }
+    </script>
+</body>
+</html> 
