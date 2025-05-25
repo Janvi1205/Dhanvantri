@@ -1,0 +1,1040 @@
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Personalized Pharmacogenomics Report - 00011</title>
+            <style>
+                :root {
+                    --primary-color: #2563eb;
+                    --primary-light: #dbeafe;
+                    --secondary-color: #475569;
+                    --accent-color: #8b5cf6;
+                    --success-color: #10b981;
+                    --warning-color: #f59e0b;
+                    --danger-color: #ef4444;
+                    --text-color: #1e293b;
+                    --text-light: #64748b;
+                    --bg-color: #ffffff;
+                    --bg-light: #f8fafc;
+                    --border-color: #e2e8f0;
+                    --border-radius: 12px;
+                    --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+                    --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+                }
+                
+                * {
+                    box-sizing: border-box;
+                    margin: 0;
+                    padding: 0;
+                }
+                
+                body {
+                    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                    line-height: 1.6;
+                    color: var(--text-color);
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    min-height: 100vh;
+                    padding: 20px;
+                }
+                
+                .container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    background-color: var(--bg-color);
+                    border-radius: var(--border-radius);
+                    box-shadow: var(--shadow-lg);
+                    overflow: hidden;
+                }
+                
+                .header {
+                    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+                    color: white;
+                    padding: 40px;
+                    text-align: center;
+                }
+                
+                .header h1 {
+                    font-size: 2.5rem;
+                    font-weight: 700;
+                    margin-bottom: 10px;
+                    color: white;
+                }
+                
+                .header p {
+                    font-size: 1.1rem;
+                    opacity: 0.9;
+                }
+                
+                .content {
+                    padding: 40px;
+                }
+                
+                .overview {
+                    background: linear-gradient(135deg, var(--bg-light) 0%, #e0f2fe 100%);
+                    border-radius: var(--border-radius);
+                    padding: 30px;
+                    margin-bottom: 40px;
+                    border-left: 5px solid var(--primary-color);
+                }
+                
+                .overview h2 {
+                    color: var(--primary-color);
+                    font-size: 1.8rem;
+                    margin-bottom: 20px;
+                    display: flex;
+                    align-items: center;
+                }
+                
+                .overview-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 20px;
+                }
+                
+                .overview-item {
+                    background: white;
+                    padding: 20px;
+                    border-radius: 8px;
+                    box-shadow: var(--shadow);
+                }
+                
+                .overview-item h3 {
+                    color: var(--secondary-color);
+                    font-size: 0.9rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    margin-bottom: 10px;
+                }
+                
+                .overview-item .value {
+                    font-size: 1.5rem;
+                    font-weight: 600;
+                    color: var(--primary-color);
+                }
+                
+                .drug-section {
+                    margin-bottom: 50px;
+                    background: white;
+                    border-radius: var(--border-radius);
+                    box-shadow: var(--shadow);
+                    overflow: hidden;
+                }
+                
+                .drug-header {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    padding: 25px 30px;
+                    border-bottom: 3px solid var(--primary-color);
+                }
+                
+                .drug-header h2 {
+                    font-size: 1.8rem;
+                    margin-bottom: 10px;
+                    color: white;
+                }
+                
+                .confidence-badge {
+                    display: inline-block;
+                    padding: 6px 12px;
+                    border-radius: 20px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+                
+                .confidence-high {
+                    background-color: var(--success-color);
+                    color: white;
+                }
+                
+                .confidence-medium {
+                    background-color: var(--warning-color);
+                    color: white;
+                }
+                
+                .confidence-low {
+                    background-color: var(--danger-color);
+                    color: white;
+                }
+                
+                .ai-badge {
+                    display: inline-block;
+                    padding: 4px 8px;
+                    border-radius: 12px;
+                    font-size: 0.7rem;
+                    font-weight: 500;
+                    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+                    color: white;
+                    margin-left: 10px;
+                }
+                
+                .drug-content {
+                    padding: 30px;
+                }
+                
+                .analysis-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                    gap: 25px;
+                    margin-bottom: 30px;
+                }
+                
+                .analysis-card {
+                    background: var(--bg-light);
+                    border-radius: 10px;
+                    padding: 25px;
+                    border-left: 4px solid var(--primary-color);
+                    transition: transform 0.2s ease, box-shadow 0.2s ease;
+                }
+                
+                .analysis-card:hover {
+                    transform: translateY(-2px);
+                    box-shadow: var(--shadow);
+                }
+                
+                .analysis-card h3 {
+                    color: var(--primary-color);
+                    font-size: 1.2rem;
+                    margin-bottom: 15px;
+                    display: flex;
+                    align-items: center;
+                }
+                
+                .analysis-card .icon {
+                    width: 24px;
+                    height: 24px;
+                    margin-right: 10px;
+                    opacity: 0.8;
+                }
+                
+                .analysis-text {
+                    color: var(--text-color);
+                    line-height: 1.7;
+                }
+                
+                .biomedlm-section {
+                    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+                    border-radius: 12px;
+                    padding: 25px;
+                    margin: 25px 0;
+                    border-left: 4px solid #f59e0b;
+                    box-shadow: var(--shadow);
+                }
+                
+                .biomedlm-section h3 {
+                    color: #92400e;
+                    margin-bottom: 20px;
+                    font-size: 1.3rem;
+                    display: flex;
+                    align-items: center;
+                }
+                
+                .biomedlm-content {
+                    background: white;
+                    border-radius: 8px;
+                    padding: 20px;
+                }
+                
+                .biomedlm-summary {
+                    margin-bottom: 20px;
+                    padding-bottom: 15px;
+                    border-bottom: 1px solid #fbbf24;
+                }
+                
+                .biomedlm-summary h4 {
+                    color: #92400e;
+                    margin-bottom: 10px;
+                    font-size: 1.1rem;
+                }
+                
+                .biomedlm-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 15px;
+                    margin-bottom: 20px;
+                }
+                
+                .biomedlm-item {
+                    background: #fffbeb;
+                    padding: 15px;
+                    border-radius: 6px;
+                    border-left: 3px solid #f59e0b;
+                }
+                
+                .biomedlm-item h5 {
+                    color: #92400e;
+                    margin-bottom: 8px;
+                    font-size: 0.95rem;
+                    font-weight: 600;
+                }
+                
+                .biomedlm-item p {
+                    color: var(--text-color);
+                    font-size: 0.9rem;
+                    line-height: 1.6;
+                }
+                
+                .biomedlm-recommendations {
+                    background: #fef3c7;
+                    padding: 15px;
+                    border-radius: 8px;
+                    border: 1px solid #fbbf24;
+                }
+                
+                .biomedlm-recommendations h5 {
+                    color: #92400e;
+                    margin-bottom: 10px;
+                    font-size: 1rem;
+                    font-weight: 600;
+                }
+                
+                .biomedlm-recommendations ul {
+                    list-style-type: none;
+                    padding: 0;
+                }
+                
+                .biomedlm-recommendations li {
+                    color: var(--text-color);
+                    font-size: 0.9rem;
+                    line-height: 1.6;
+                    margin-bottom: 8px;
+                    padding-left: 20px;
+                    position: relative;
+                }
+                
+                .biomedlm-recommendations li:before {
+                    content: "🔹";
+                    position: absolute;
+                    left: 0;
+                }
+                
+                .alternatives-section {
+                    background: #f0f9ff;
+                    border-radius: 10px;
+                    padding: 25px;
+                    margin-top: 25px;
+                    border: 1px solid var(--primary-light);
+                }
+                
+                .alternatives-section h3 {
+                    color: var(--primary-color);
+                    margin-bottom: 15px;
+                }
+                
+                .alternatives-list {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 10px;
+                }
+                
+                .alternative-item {
+                    background: white;
+                    padding: 12px 16px;
+                    border-radius: 6px;
+                    border-left: 3px solid var(--accent-color);
+                    font-weight: 500;
+                }
+                
+                .genetics-section {
+                    background: #fefce8;
+                    border-radius: 10px;
+                    padding: 25px;
+                    margin-top: 25px;
+                    border: 1px solid #fef08a;
+                }
+                
+                .genetics-section h3 {
+                    color: #a16207;
+                    margin-bottom: 15px;
+                }
+                
+                .genetics-details {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 15px;
+                }
+                
+                .genetics-item {
+                    background: white;
+                    padding: 15px;
+                    border-radius: 6px;
+                    border-left: 3px solid #eab308;
+                }
+                
+                .data-sources {
+                    margin-top: 30px;
+                    padding: 20px;
+                    background: #f1f5f9;
+                    border-radius: 8px;
+                    border-left: 4px solid var(--secondary-color);
+                }
+                
+                .data-sources h4 {
+                    color: var(--secondary-color);
+                    margin-bottom: 10px;
+                }
+                
+                .sources-list {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                }
+                
+                .source-tag {
+                    background: var(--secondary-color);
+                    color: white;
+                    padding: 4px 12px;
+                    border-radius: 15px;
+                    font-size: 0.8rem;
+                    font-weight: 500;
+                }
+                
+                .footer {
+                    background: var(--bg-light);
+                    padding: 30px;
+                    text-align: center;
+                    color: var(--text-light);
+                    border-top: 1px solid var(--border-color);
+                }
+                
+                .disclaimer {
+                    background: #fef2f2;
+                    border: 1px solid #fecaca;
+                    border-radius: 8px;
+                    padding: 20px;
+                    margin: 30px 0;
+                    color: #991b1b;
+                }
+                
+                .disclaimer h4 {
+                    color: #991b1b;
+                    margin-bottom: 10px;
+                }
+                
+                @media (max-width: 768px) {
+                    .analysis-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    
+                    .overview-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    
+                    .alternatives-list {
+                        grid-template-columns: 1fr;
+                    }
+                    
+                    .genetics-details {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>🧬 Personalized Pharmacogenomics Report</h1>
+                    <p>Comprehensive Drug Analysis for Patient: 00011</p>
+                    <p>Generated on 2025-05-24 23:30</p>
+                </div>
+                
+                <div class="content">
+                    <div class="overview">
+                        <h2>📊 Analysis Overview</h2>
+                        <div class="overview-grid">
+                            <div class="overview-item">
+                                <h3>Drugs Analyzed</h3>
+                                <div class="value">7</div>
+                            </div>
+                            <div class="overview-item">
+                                <h3>Total Genes Considered</h3>
+                                <div class="value">437</div>
+                            </div>
+                            <div class="overview-item">
+                                <h3>Data Sources</h3>
+                                <div class="value">1</div>
+                            </div>
+                            <div class="overview-item">
+                                <h3>Analysis Quality</h3>
+                                <div class="value">MEDIUM</div>
+                            </div>
+                        </div>
+                    </div>
+        
+        <div class="drug-section">
+            <div class="drug-header">
+                <h2>💊 custom_1748109382722</h2>
+                <span class="confidence-badge confidence-medium">
+                    MEDIUM Confidence
+                </span>
+                 <span class="ai-badge">🤖 AI Analysis</span>
+            </div>
+            
+            <div class="drug-content">
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <h3>🎯 Efficacy Prediction</h3>
+                        <div class="analysis-text">Custom_1748109382722's genetic profile suggests a reduced efficacy response to certain medications. The presence of variants in CYP2D6 and COMT genes may impact drug metabolism and neurotransmitter regulation, potentially affecting treatment outcomes.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>⚠️ Risk Assessment</h3>
+                        <div class="analysis-text">This patient's profile indicates an increased risk of adverse drug reactions. Variants in the RTDR1 and GNAZ genes could lead to altered drug sensitivity and potential side effects. Additionally, the GSTT1 gene variation may affect detoxification processes, requiring careful medication selection.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>💉 Dosage Recommendation</h3>
+                        <div class="analysis-text">For CYP2D6-metabolized drugs, a reduced dosage is advised due to the patient's potential impaired metabolism. Starting with lower doses and closely monitoring for therapeutic response is crucial. Adjustments should be made cautiously to avoid toxicity.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>🏥 Clinical Considerations</h3>
+                        <div class="analysis-text">Close observation for drug-induced side effects is essential, especially neurological and gastrointestinal symptoms. Regular assessments of liver function and blood cell counts are recommended due to the potential impact of the identified genetic variants on these systems.</div>
+                    </div>
+                </div>
+                
+                <div class="genetics-section">
+                    <h3>🧬 Genetic Impact Analysis</h3>
+                    <div class="genetics-details">
+                        <div class="genetics-item">
+                            <strong>Pharmacokinetic Impact:</strong><br>
+                            The CYP2D6 variant may result in decreased enzyme activity, affecting the metabolism of various drugs. This could lead to higher drug exposure and potential toxicity if not managed appropriately.
+                        </div>
+                        <div class="genetics-item">
+                            <strong>Pharmacodynamic Impact:</strong><br>
+                            COMT gene variation may influence dopamine metabolism, impacting the response to dopamine-related medications. RTDR1 and GNAZ variants might also modulate drug-receptor interactions, altering the efficacy of certain treatments.
+                        </div>
+                        <div class="genetics-item">
+                            <strong>Monitoring Required:</strong><br>
+                            Regular therapeutic drug monitoring is advised to ensure optimal drug levels. Close surveillance for adverse reactions, particularly during the initial treatment phase, is crucial. Genetic counseling can provide further insights into managing this patient's care.
+                        </div>
+                    </div>
+                </div>
+                
+                
+        <div class="alternatives-section">
+            <h3>🔄 Alternative Medications</h3>
+            <div class="alternatives-list">
+                <div class="alternative-item">Consider non-CYP2D6 substrates like fluoxetine or citalopram for antidepressant therapy, as they are less affected by the patient's CYP2D6 genotype. - For pain management, non-opioid alternatives such as pregabalin or gabapentin might be preferred due to the patient's RTDR1 variant, which could influence opioid sensitivity. - Drugs with minimal GSTT1 involvement, such as paracetamol, could be safer options for analgesia, reducing the risk associated with GSTT1 gene variation.</div>
+            </div>
+        </div>
+        
+                
+                
+        <div class="alternatives-section" style="background: #fef2f2; border-color: #fecaca;">
+            <h3 style="color: var(--danger-color);">🚫 Contraindications & Warnings</h3>
+            <div class="alternatives-list">
+                <div class="alternative-item" style="border-left-color: var(--danger-color);">Drugs extensively metabolized by CYP2D6, especially those with a narrow therapeutic index, should be used with caution. - Opioids may require careful titration due to potential altered sensitivity.</div>
+            </div>
+        </div>
+        
+                
+                <div class="data-sources">
+                    <h4>📚 Data Sources</h4>
+                    <div class="sources-list">
+                        <span class="source-tag">Cohere AI</span> <span class="source-tag">Cohere AI</span>
+                    </div>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: var(--text-light);">
+                        Genes analyzed: RTDR1:GNAZ, BID, LL22NC03-75H12.2, GSTT1, RP1-130H16.18:GATSL3, RFPL1, SOX10, MYO18B, FAM109B, MOV10L1
+                         (+427 more)
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="drug-section">
+            <div class="drug-header">
+                <h2>💊 custom_1748109386806</h2>
+                <span class="confidence-badge confidence-medium">
+                    MEDIUM Confidence
+                </span>
+                 <span class="ai-badge">🤖 AI Analysis</span>
+            </div>
+            
+            <div class="drug-content">
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <h3>🎯 Efficacy Prediction</h3>
+                        <div class="analysis-text">Custom_1748109386806's genetic profile suggests a potential reduced efficacy of certain medications due to variants in the CYP2D6 and COMT genes. These genes are involved in drug metabolism and response, and the identified variants may impact the effectiveness of specific treatments.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>⚠️ Risk Assessment</h3>
+                        <div class="analysis-text">The presence of variants in RTDR1:GNAZ and BID genes may increase the risk of adverse reactions, particularly in the central nervous system. Additionally, the LL22NC03-75H12.2 variant could contribute to an elevated risk of hematological side effects.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>💉 Dosage Recommendation</h3>
+                        <div class="analysis-text">For CYP2D6-metabolized drugs, a reduced initial dose is advised, with careful titration based on therapeutic response and adverse event monitoring. This patient's CYP2D6 genotype may lead to decreased enzyme activity, affecting drug exposure.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>🏥 Clinical Considerations</h3>
+                        <div class="analysis-text">Close observation for CNS-related symptoms and regular hematological assessments are crucial. Given the pharmacodynamic implications, monitoring treatment response and adjusting therapy accordingly will be essential for optimal outcomes.</div>
+                    </div>
+                </div>
+                
+                <div class="genetics-section">
+                    <h3>🧬 Genetic Impact Analysis</h3>
+                    <div class="genetics-details">
+                        <div class="genetics-item">
+                            <strong>Pharmacokinetic Impact:</strong><br>
+                            The CYP2D6 variant may result in decreased enzyme activity, impacting the metabolism of various drugs, including antidepressants and opioids. This could lead to higher drug concentrations and increased side effects.
+                        </div>
+                        <div class="genetics-item">
+                            <strong>Pharmacodynamic Impact:</strong><br>
+                            COMT variants can influence dopamine metabolism, potentially affecting the response to dopaminergic drugs. RTDR1:GNAZ and BID gene variants may also modulate neurotransmitter signaling, impacting drug efficacy and safety.
+                        </div>
+                        <div class="genetics-item">
+                            <strong>Monitoring Required:</strong><br>
+                            Implement routine therapeutic drug monitoring to assess drug exposure and guide dose adjustments. Regular clinical assessments for adverse events, especially neurological and hematological, are crucial for this patient's genetic profile.
+                        </div>
+                    </div>
+                </div>
+                
+                
+        <div class="alternatives-section">
+            <h3>🔄 Alternative Medications</h3>
+            <div class="alternatives-list">
+                <div class="alternative-item">Consider non-CYP2D6 substrate medications for pain management, such as non-opioid analgesics or alternative opioid drugs with different metabolic pathways. - For psychiatric conditions, explore options like serotonin-norepinephrine reuptake inhibitors (SNRIs) or atypical antipsychotics, which have less interaction with the identified COMT variants. - In the case of cancer treatment, evaluate targeted therapies or immunotherapies that are not primarily metabolized by CYP enzymes.</div>
+            </div>
+        </div>
+        
+                
+                
+        <div class="alternatives-section" style="background: #fef2f2; border-color: #fecaca;">
+            <h3 style="color: var(--danger-color);">🚫 Contraindications & Warnings</h3>
+            <div class="alternatives-list">
+                <div class="alternative-item" style="border-left-color: var(--danger-color);">Drugs that are strong CYP2D6 inhibitors or inducers should be used with caution, as they may further alter enzyme activity. - Medications with a narrow therapeutic index metabolized by CYP2D6 might require more frequent monitoring.</div>
+            </div>
+        </div>
+        
+                
+                <div class="data-sources">
+                    <h4>📚 Data Sources</h4>
+                    <div class="sources-list">
+                        <span class="source-tag">Cohere AI</span> <span class="source-tag">Cohere AI</span>
+                    </div>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: var(--text-light);">
+                        Genes analyzed: RTDR1:GNAZ, BID, LL22NC03-75H12.2, GSTT1, RP1-130H16.18:GATSL3, RFPL1, SOX10, MYO18B, FAM109B, MOV10L1
+                         (+427 more)
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="drug-section">
+            <div class="drug-header">
+                <h2>💊 custom_1748109395025</h2>
+                <span class="confidence-badge confidence-medium">
+                    MEDIUM Confidence
+                </span>
+                 <span class="ai-badge">🤖 AI Analysis</span>
+            </div>
+            
+            <div class="drug-content">
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <h3>🎯 Efficacy Prediction</h3>
+                        <div class="analysis-text">Custom_1748109395025's genetic profile suggests a potential reduced efficacy of certain medications. The presence of variants in CYP2D6 and COMT genes may impact drug metabolism and response, particularly for drugs that are substrates of these enzymes.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>⚠️ Risk Assessment</h3>
+                        <div class="analysis-text">This patient's genetic variants indicate an increased risk of adverse drug reactions. The RTDR1:GNAZ gene fusion and variants in BID and SOX10 genes could lead to altered drug sensitivity and potential toxicity. Close monitoring is advised for medications affecting these pathways.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>💉 Dosage Recommendation</h3>
+                        <div class="analysis-text">Dosage adjustments may be required for drugs metabolized by CYP2D6, as the patient's genotype suggests decreased enzyme activity. Starting with lower doses and gradually titrating upwards is recommended to achieve therapeutic levels while minimizing side effects.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>🏥 Clinical Considerations</h3>
+                        <div class="analysis-text">Given the genetic findings, it is crucial to closely monitor for signs of drug toxicity, particularly with medications targeting the nervous system. Regular assessments of liver function and renal health are advised, as certain variants may impact drug elimination.</div>
+                    </div>
+                </div>
+                
+                <div class="genetics-section">
+                    <h3>🧬 Genetic Impact Analysis</h3>
+                    <div class="genetics-details">
+                        <div class="genetics-item">
+                            <strong>Pharmacokinetic Impact:</strong><br>
+                            The CYP2D6 variant is expected to reduce the metabolism of CYP2D6 substrates, potentially leading to higher drug exposure. This may result in increased side effects or toxicity if not managed appropriately.
+                        </div>
+                        <div class="genetics-item">
+                            <strong>Pharmacodynamic Impact:</strong><br>
+                            COMT variants can affect dopamine metabolism, which may influence the response to dopaminergic drugs. RTDR1:GNAZ fusion could potentially impact cellular signaling, altering drug sensitivity.
+                        </div>
+                        <div class="genetics-item">
+                            <strong>Monitoring Required:</strong><br>
+                            Therapeutic drug monitoring is essential to ensure optimal dosing. Regularly assess for symptoms of drug toxicity, especially neurological effects. Consider genetic testing for family members to identify potential inherited risk factors.
+                        </div>
+                    </div>
+                </div>
+                
+                
+        <div class="alternatives-section">
+            <h3>🔄 Alternative Medications</h3>
+            <div class="alternatives-list">
+                <div class="alternative-item">Consider non-CYP2D6 substrates like fluoxetine or citalopram for depression, as they are less likely to be affected by the patient's CYP2D6 genotype. - For pain management, non-opioid alternatives such as pregabalin or gabapentin may be preferred, as they are not metabolized by CYP2D6. - In the case of psychostimulant treatment, methylphenidate or atomoxetine could be explored, as they have different pharmacokinetic profiles.</div>
+            </div>
+        </div>
+        
+                
+                
+        <div class="alternatives-section" style="background: #fef2f2; border-color: #fecaca;">
+            <h3 style="color: var(--danger-color);">🚫 Contraindications & Warnings</h3>
+            <div class="alternatives-list">
+                <div class="alternative-item" style="border-left-color: var(--danger-color);">Drugs that are strong CYP2D6 inhibitors should be used with caution, as they may further decrease enzyme activity. - Medications that are highly dependent on CYP2D6 for activation or metabolism should be carefully selected and monitored.</div>
+            </div>
+        </div>
+        
+                
+                <div class="data-sources">
+                    <h4>📚 Data Sources</h4>
+                    <div class="sources-list">
+                        <span class="source-tag">Cohere AI</span> <span class="source-tag">Cohere AI</span>
+                    </div>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: var(--text-light);">
+                        Genes analyzed: RTDR1:GNAZ, BID, LL22NC03-75H12.2, GSTT1, RP1-130H16.18:GATSL3, RFPL1, SOX10, MYO18B, FAM109B, MOV10L1
+                         (+427 more)
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="drug-section">
+            <div class="drug-header">
+                <h2>💊 custom_1748109396475</h2>
+                <span class="confidence-badge confidence-medium">
+                    MEDIUM Confidence
+                </span>
+                 <span class="ai-badge">🤖 AI Analysis</span>
+            </div>
+            
+            <div class="drug-content">
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <h3>🎯 Efficacy Prediction</h3>
+                        <div class="analysis-text">Custom_1748109396475's genetic profile suggests a potential impact on drug efficacy, particularly with medications metabolized by the CYP2D6 enzyme. The presence of variants in the CYP2D6 gene may alter enzyme activity, affecting drug response.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>⚠️ Risk Assessment</h3>
+                        <div class="analysis-text">This patient's profile indicates a moderate risk for adverse drug reactions. Variants in genes like RTDR1:GNAZ and SOX10 could influence drug sensitivity and toxicity. Further, the GNAZ gene is associated with neurological disorders, and its variants may require careful consideration when prescribing certain medications.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>💉 Dosage Recommendation</h3>
+                        <div class="analysis-text">Dosage adjustments are likely necessary for drugs primarily metabolized by CYP2D6. A reduced initial dose is advised, with careful titration based on therapeutic response and adverse effects.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>🏥 Clinical Considerations</h3>
+                        <div class="analysis-text">Given the genetic variants in RTDR1:GNAZ and SOX10, close monitoring for neurological symptoms and potential drug-induced toxicities is essential. Regular assessments of liver function and renal health are also recommended due to the involvement of GSTT1 and CYP2D6 in drug metabolism.</div>
+                    </div>
+                </div>
+                
+                <div class="genetics-section">
+                    <h3>🧬 Genetic Impact Analysis</h3>
+                    <div class="genetics-details">
+                        <div class="genetics-item">
+                            <strong>Pharmacokinetic Impact:</strong><br>
+                            The CYP2D6 gene variants may lead to decreased enzyme activity, affecting the metabolism of various drugs. This could result in higher plasma concentrations and prolonged exposure, increasing the risk of adverse effects.
+                        </div>
+                        <div class="genetics-item">
+                            <strong>Pharmacodynamic Impact:</strong><br>
+                            COMT gene variants can influence dopamine metabolism, potentially impacting the response to COMT inhibitor medications. RTDR1:GNAZ variants may also affect cellular signaling and drug response, particularly in the central nervous system.
+                        </div>
+                        <div class="genetics-item">
+                            <strong>Monitoring Required:</strong><br>
+                            Regular therapeutic drug monitoring is advised to ensure optimal drug levels. Close observation for neurological and gastrointestinal side effects is crucial. Additionally, periodic genetic counseling could provide further insights into the evolving understanding of these genetic variants and their implications.
+                        </div>
+                    </div>
+                </div>
+                
+                
+        <div class="alternatives-section">
+            <h3>🔄 Alternative Medications</h3>
+            <div class="alternatives-list">
+                <div class="alternative-item">Consider using drugs that are not primarily metabolized by CYP2D6, such as certain SSRIs (e.g., citalopram) or atypical antipsychotics (e.g., aripiprazole). - For pain management, non-opioid alternatives like pregabalin or gabapentin could be explored, as they have different pharmacokinetic pathways. - In the case of COMT inhibitors, consider tolcapone, which has a distinct mechanism of action and may be less influenced by the identified COMT variants.</div>
+            </div>
+        </div>
+        
+                
+                
+        <div class="alternatives-section" style="background: #fef2f2; border-color: #fecaca;">
+            <h3 style="color: var(--danger-color);">🚫 Contraindications & Warnings</h3>
+            <div class="alternatives-list">
+                <div class="alternative-item" style="border-left-color: var(--danger-color);">Drugs that are strong CYP2D6 inhibitors or inducers should be used with caution, as they may significantly alter enzyme activity. - Medications with a narrow therapeutic index metabolized by CYP2D6 might require more frequent monitoring and dose adjustments.</div>
+            </div>
+        </div>
+        
+                
+                <div class="data-sources">
+                    <h4>📚 Data Sources</h4>
+                    <div class="sources-list">
+                        <span class="source-tag">Cohere AI</span> <span class="source-tag">Cohere AI</span>
+                    </div>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: var(--text-light);">
+                        Genes analyzed: RTDR1:GNAZ, BID, LL22NC03-75H12.2, GSTT1, RP1-130H16.18:GATSL3, RFPL1, SOX10, MYO18B, FAM109B, MOV10L1
+                         (+427 more)
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="drug-section">
+            <div class="drug-header">
+                <h2>💊 custom_1748109401083</h2>
+                <span class="confidence-badge confidence-medium">
+                    MEDIUM Confidence
+                </span>
+                 <span class="ai-badge">🤖 AI Analysis</span>
+            </div>
+            
+            <div class="drug-content">
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <h3>🎯 Efficacy Prediction</h3>
+                        <div class="analysis-text">Custom_1748109401083's efficacy may be influenced by variants in CYP2D6 and COMT genes. CYP2D6 polymorphisms can affect the metabolism of certain medications, potentially altering their effectiveness. The COMT gene variant may impact the drug's target engagement and response, but the specific effect depends on the medication's mechanism of action.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>⚠️ Risk Assessment</h3>
+                        <div class="analysis-text">The presence of RTDR1:GNAZ and BID gene variants could potentially increase the risk of adverse effects, especially if these genes are involved in the drug's mechanism of action. Additionally, the RP1-130H16.18:GATSL3 gene, with its unknown function, warrants caution and further investigation to rule out any unexpected risks.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>💉 Dosage Recommendation</h3>
+                        <div class="analysis-text">Genetic testing reveals that custom_1748109401083 may require a personalized dosage strategy. CYP2D6 variants can affect drug metabolism, so adjusting the dose based on CYP2D6 activity may be necessary to achieve optimal therapeutic levels.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>🏥 Clinical Considerations</h3>
+                        <div class="analysis-text">Close attention should be paid to the patient's response, especially if the treatment involves genes with identified variants (CYP2D6, COMT, RTDR1:GNAZ, and BID). Regular monitoring of drug levels and clinical symptoms is essential to ensure efficacy and safety.</div>
+                    </div>
+                </div>
+                
+                <div class="genetics-section">
+                    <h3>🧬 Genetic Impact Analysis</h3>
+                    <div class="genetics-details">
+                        <div class="genetics-item">
+                            <strong>Pharmacokinetic Impact:</strong><br>
+                            CYP2D6 gene variants can significantly influence the pharmacokinetics of custom_1748109401083. CYP2D6 is a key enzyme in drug metabolism, and its activity can be altered by genetic polymorphisms, leading to variable drug exposure. This may result in altered absorption and elimination rates, affecting the overall drug concentration in the body.
+                        </div>
+                        <div class="genetics-item">
+                            <strong>Pharmacodynamic Impact:</strong><br>
+                            The COMT gene variant may modulate the pharmacodynamic response to custom_1748109401083. COMT is involved in catecholamine metabolism, and its genetic variation can impact the drug's target engagement and downstream signaling, potentially affecting the overall therapeutic effect.
+                        </div>
+                        <div class="genetics-item">
+                            <strong>Monitoring Required:</strong><br>
+                            Regular monitoring of CYP2D6 activity and drug levels is advised to ensure appropriate dosing and minimize adverse effects. Additionally, close observation of clinical symptoms and potential side effects related to the RTDR1:GNAZ and BID gene variants is crucial for patient safety.
+                        </div>
+                    </div>
+                </div>
+                
+                
+        <div class="alternatives-section">
+            <h3>🔄 Alternative Medications</h3>
+            <div class="alternatives-list">
+                <div class="alternative-item">Consider medications that are not primarily metabolized by CYP2D6, as certain CYP2D6 variants may impact the efficacy of such drugs. - For patients with COMT gene variants, alternative treatments with different mechanisms of action could be explored to ensure optimal response. - If the drug's mechanism involves RTDR1:GNAZ or BID genes, alternative options with a different target might be beneficial to minimize potential adverse effects.</div>
+            </div>
+        </div>
+        
+                
+                
+                
+                <div class="data-sources">
+                    <h4>📚 Data Sources</h4>
+                    <div class="sources-list">
+                        <span class="source-tag">Cohere AI</span> <span class="source-tag">Cohere AI</span>
+                    </div>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: var(--text-light);">
+                        Genes analyzed: RTDR1:GNAZ, BID, LL22NC03-75H12.2, GSTT1, RP1-130H16.18:GATSL3, RFPL1, SOX10, MYO18B, FAM109B, MOV10L1
+                         (+427 more)
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="drug-section">
+            <div class="drug-header">
+                <h2>💊 custom_1748109404405</h2>
+                <span class="confidence-badge confidence-medium">
+                    MEDIUM Confidence
+                </span>
+                 <span class="ai-badge">🤖 AI Analysis</span>
+            </div>
+            
+            <div class="drug-content">
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <h3>🎯 Efficacy Prediction</h3>
+                        <div class="analysis-text">Custom_1748109404405's genetic profile suggests a potential impact on the efficacy of certain medications. The presence of variants in CYP2D6 and COMT genes may affect drug metabolism and response, particularly for drugs that are substrates of these enzymes. This could lead to altered drug levels and therapeutic outcomes.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>⚠️ Risk Assessment</h3>
+                        <div class="analysis-text">This patient's genetic variants indicate an increased risk of adverse reactions to specific medications. The RTDR1:GNAZ gene fusion and variants in BID and SOX10 genes may contribute to drug-induced toxicity and altered cell signaling pathways. Close monitoring is required to ensure patient safety.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>💉 Dosage Recommendation</h3>
+                        <div class="analysis-text">Dosage adjustments are likely necessary for this patient. The CYP2D6 gene variant may result in reduced enzyme activity, affecting the metabolism of certain drugs. Consider reducing the initial dose and closely monitoring for therapeutic response and adverse effects.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>🏥 Clinical Considerations</h3>
+                        <div class="analysis-text">Given the genetic profile, it is crucial to monitor for signs of drug-induced liver injury, especially with medications metabolized by CYP2D6. Additionally, watch for neurological symptoms, as the BID and SOX10 variants may impact neural development and function.</div>
+                    </div>
+                </div>
+                
+                <div class="genetics-section">
+                    <h3>🧬 Genetic Impact Analysis</h3>
+                    <div class="genetics-details">
+                        <div class="genetics-item">
+                            <strong>Pharmacokinetic Impact:</strong><br>
+                            Genetic variations in CYP2D6 can significantly influence drug metabolism, potentially leading to higher plasma concentrations of CYP2D6 substrates. The RTDR1:GNAZ fusion may also affect drug absorption and distribution, particularly for drugs with specific transport mechanisms.
+                        </div>
+                        <div class="genetics-item">
+                            <strong>Pharmacodynamic Impact:</strong><br>
+                            The COMT gene variant may alter dopamine metabolism, impacting the response to dopamine-related medications. Additionally, the SOX10 variant could affect the expression of target genes, potentially modifying drug-receptor interactions and therapeutic outcomes.
+                        </div>
+                        <div class="genetics-item">
+                            <strong>Monitoring Required:</strong><br>
+                            Regularly assess liver function tests and monitor for any signs of hepatotoxicity. Additionally, evaluate the patient's neurological status, including mood, cognition, and motor skills, to detect any adverse effects related to the identified genetic variants.
+                        </div>
+                    </div>
+                </div>
+                
+                
+        <div class="alternatives-section">
+            <h3>🔄 Alternative Medications</h3>
+            <div class="alternatives-list">
+                <div class="alternative-item">Consider using alternative antidepressants such as mirtazapine or bupropion, which are not primarily metabolized by CYP2D6, to avoid potential drug-gene interactions. - For pain management, non-opioid options like pregabalin or gabapentin could be explored, as they have different mechanisms of action and are not significantly affected by the identified genetic variants. - In the case of psychostimulant therapy, methylphenidate or atomoxetine might be preferred over amphetamines due to their di...</div>
+            </div>
+        </div>
+        
+                
+                
+        <div class="alternatives-section" style="background: #fef2f2; border-color: #fecaca;">
+            <h3 style="color: var(--danger-color);">🚫 Contraindications & Warnings</h3>
+            <div class="alternatives-list">
+                <div class="alternative-item" style="border-left-color: var(--danger-color);">Drugs that are strong CYP2D6 inhibitors or inducers should be used with caution, as they may further disrupt the enzyme's activity. - Medications known to cause hepatotoxicity, especially those metabolized by CYP2D6, might pose a higher risk and require careful consideration.</div>
+            </div>
+        </div>
+        
+                
+                <div class="data-sources">
+                    <h4>📚 Data Sources</h4>
+                    <div class="sources-list">
+                        <span class="source-tag">Cohere AI</span> <span class="source-tag">Cohere AI</span>
+                    </div>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: var(--text-light);">
+                        Genes analyzed: RTDR1:GNAZ, BID, LL22NC03-75H12.2, GSTT1, RP1-130H16.18:GATSL3, RFPL1, SOX10, MYO18B, FAM109B, MOV10L1
+                         (+427 more)
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="drug-section">
+            <div class="drug-header">
+                <h2>💊 custom_1748109408181</h2>
+                <span class="confidence-badge confidence-medium">
+                    MEDIUM Confidence
+                </span>
+                 <span class="ai-badge">🤖 AI Analysis</span>
+            </div>
+            
+            <div class="drug-content">
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <h3>🎯 Efficacy Prediction</h3>
+                        <div class="analysis-text">Custom_1748109408181's genetic profile suggests a potential reduced efficacy for certain medications. The presence of variants in CYP2D6 and COMT genes may impact drug metabolism and response, particularly for drugs that are substrates of these enzymes.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>⚠️ Risk Assessment</h3>
+                        <div class="analysis-text">There is a moderate risk of adverse effects and treatment failure. The RTDR1:GNAZ and BID gene variants could influence drug response and may require careful selection of medications. Additionally, the GSTT1 gene variation may affect detoxification processes, potentially increasing susceptibility to drug-induced toxicities.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>💉 Dosage Recommendation</h3>
+                        <div class="analysis-text">For CYP2D6 substrates, consider a reduced initial dose and closely monitor for therapeutic response. The impact of COMT variants on dosage is less clear, but starting with a lower dose and titrating upwards may be a prudent strategy.</div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>🏥 Clinical Considerations</h3>
+                        <div class="analysis-text">Close monitoring of therapeutic response and adverse events is crucial. Given the potential impact on drug metabolism, regular assessments for drug efficacy and toxicity are recommended. Additionally, consider genetic counseling to provide further insights and patient education.</div>
+                    </div>
+                </div>
+                
+                <div class="genetics-section">
+                    <h3>🧬 Genetic Impact Analysis</h3>
+                    <div class="genetics-details">
+                        <div class="genetics-item">
+                            <strong>Pharmacokinetic Impact:</strong><br>
+                            The CYP2D6 gene variation may result in decreased enzyme activity, affecting the metabolism of many commonly prescribed drugs. This could lead to higher drug exposure and potential toxicity. The role of COMT in catecholamine metabolism may also influence drug levels and response.
+                        </div>
+                        <div class="genetics-item">
+                            <strong>Pharmacodynamic Impact:</strong><br>
+                            Variants in RTDR1:GNAZ and BID genes could alter drug target interactions, potentially impacting the efficacy of certain medications. COMT's role in dopamine metabolism may affect the response to dopaminergic drugs, while GSTT1's involvement in detoxification processes may influence drug-induced oxidative stress.
+                        </div>
+                        <div class="genetics-item">
+                            <strong>Monitoring Required:</strong><br>
+                            Regular therapeutic drug monitoring is advised to ensure optimal drug levels. Close observation for adverse drug reactions is crucial, especially for drugs with a narrow therapeutic index. Consider periodic genetic counseling sessions to update treatment strategies based on evolving genetic research.
+                        </div>
+                    </div>
+                </div>
+                
+                
+        <div class="alternatives-section">
+            <h3>🔄 Alternative Medications</h3>
+            <div class="alternatives-list">
+                <div class="alternative-item">Consider non-CYP2D6 substrate drugs, such as selective serotonin reuptake inhibitors (SSRIs) like escitalopram or sertraline, which are metabolized by other pathways. - For pain management, non-opioid alternatives like pregabalin or gabapentin could be explored, as they have different mechanisms of action. - In the case of psychostimulants, methylphenidate or lisdexamfetamine may be considered, as they have a different pharmacokinetic profile.</div>
+            </div>
+        </div>
+        
+                
+                
+        <div class="alternatives-section" style="background: #fef2f2; border-color: #fecaca;">
+            <h3 style="color: var(--danger-color);">🚫 Contraindications & Warnings</h3>
+            <div class="alternatives-list">
+                <div class="alternative-item" style="border-left-color: var(--danger-color);">Drugs that are highly dependent on CYP2D6 for metabolism should be used with caution, as they may accumulate and cause adverse effects. - Medications that are known to induce or inhibit CYP2D6 activity may require dosage adjustments.</div>
+            </div>
+        </div>
+        
+                
+                <div class="data-sources">
+                    <h4>📚 Data Sources</h4>
+                    <div class="sources-list">
+                        <span class="source-tag">Cohere AI</span> <span class="source-tag">Cohere AI</span>
+                    </div>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: var(--text-light);">
+                        Genes analyzed: RTDR1:GNAZ, BID, LL22NC03-75H12.2, GSTT1, RP1-130H16.18:GATSL3, RFPL1, SOX10, MYO18B, FAM109B, MOV10L1
+                         (+427 more)
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+                    <div class="disclaimer">
+                        <h4>⚠️ Important Medical Disclaimer</h4>
+                        <p>This pharmacogenomics report is for informational purposes only and should not replace professional medical advice. Always consult with your healthcare provider before making any changes to your medication regimen. Individual responses to medications can vary due to factors beyond genetics.</p>
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    <p>Report generated using comprehensive pharmacogenomics databases (PharmGKB, CPIC) and AI-powered analysis.</p>
+                    <p>For questions about this report, consult with your healthcare provider or a clinical pharmacist.</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        
